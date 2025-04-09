@@ -22,7 +22,7 @@ def test_loading_of_jpg_image():
 
     assert type(img) == np.ndarray
     assert img.shape == (4000, 6000, 3)
-    assert img.dtype == np.uint8
+    assert img.dtype == np.uint16
 
 
 def test_loading_of_raw_image():
@@ -31,4 +31,4 @@ def test_loading_of_raw_image():
 
     assert type(img) == np.ndarray
     assert img.shape == (4000, 6000, 3)
-    assert img.dtype == np.uint8
+    assert img.dtype == np.uint16

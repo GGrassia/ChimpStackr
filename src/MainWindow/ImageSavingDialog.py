@@ -121,24 +121,45 @@ def createDialog(imageArray, imType, chosenPath):
         else:
             return
 
-    # Convert float32 image to uint8
-    imageArray = np.around(imageArray)
-    imageArray[imageArray > 255] = 255
-    imageArray[imageArray < 0] = 0
-    imageArray = imageArray.astype(np.uint8)
-
-    # Get compression/quality for JPG and PNG (don't compress tiff)
-    compression_list = None
-    if imType == "JPG":
-        # 0->100 quality (JPG)
-        compression_list = [cv2.IMWRITE_JPEG_QUALITY, compressionFactor]
-    elif imType == "PNG":
-        # 9->0 compression (PNG)
-        compression_list = [cv2.IMWRITE_PNG_COMPRESSION, compressionFactor]
-
-    # Try saving image to disk
     try:
-        cv2.imwrite(chosenPath, imageArray, compression_list)
+        if imType == "TIFF":
+            # Handle 16-bit TIFF properly
+            min_val = np.min(imageArray)
+            max_val = np.max(imageArray)
+            
+            print(f"Original image range: {min_val} to {max_val}")
+            
+            # Normalize to 0-1 range
+            if min_val != max_val:  # Prevent division by zero
+                normalized = (imageArray - min_val) / (max_val - min_val)
+            else:
+                normalized = imageArray * 0  # All values are the same
+            
+            # Scale to full 16-bit range
+            image_16bit = (normalized * 65535).astype(np.uint16)
+            
+            print(f"16-bit range after conversion: {np.min(image_16bit)} to {np.max(image_16bit)}")
+            
+            # Save as TIFF with compression
+            cv2.imwrite(chosenPath, image_16bit, [cv2.IMWRITE_TIFF_COMPRESSION, 1])
+        else:
+            # Original 8-bit handling for JPG and PNG
+            imageArray = np.around(imageArray)
+            imageArray[imageArray > 255] = 255
+            imageArray[imageArray < 0] = 0
+            imageArray = imageArray.astype(np.uint16)
+
+            # Get compression/quality for JPG and PNG
+            compression_list = None
+            if imType == "JPG":
+                # 0->100 quality (JPG)
+                compression_list = [cv2.IMWRITE_JPEG_QUALITY, compressionFactor]
+            elif imType == "PNG":
+                # 9->0 compression (PNG)
+                compression_list = [cv2.IMWRITE_PNG_COMPRESSION, compressionFactor]
+
+            cv2.imwrite(chosenPath, imageArray, compression_list)
+        
         imgPath = chosenPath
     except Exception as e:
         errorStackTrace = e

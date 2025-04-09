@@ -143,7 +143,7 @@ def compute_focusmap(array1, array2, kernel_size):
     BGR2GRAY[blockspergrid, threadsperblock](array2, array2_gray)
 
     # Result will be stored here
-    focusmap = cuda.device_array(shape=array1_gray.shape, dtype=np.uint8)
+    focusmap = cuda.device_array(shape=array1_gray.shape, dtype=np.uint16)
 
     # Start calculation
     compute_focusmap_gpu[blockspergrid, threadsperblock](

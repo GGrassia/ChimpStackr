@@ -955,7 +955,7 @@ class im_reg:
         )
         result = cv2.warpAffine(im1, translation_matrix, (width, height))
 
-        return result.astype(np.uint8)
+        return result.astype(np.uint16)
 
     # TODO: Implement with option of selecting what method to use (not yet successfully implemented)
     # Register im1 to im0 for Rotation, Scale, Translation (RST)
@@ -1007,4 +1007,4 @@ class im_reg:
         result = cv2.warpAffine(result, rotation, (width, height))
         result = cv2.warpAffine(result, translation, (width, height))
 
-        return result.astype(np.uint8)
+        return result.astype(np.uint16)

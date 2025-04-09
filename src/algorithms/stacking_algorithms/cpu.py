@@ -62,7 +62,7 @@ def gaussian_pyramid(img, num_levels):
 
 # Compute focusmap for the same pyramid level in 2 different pyramids
 @nb.njit(
-    nb.uint8[:, :](nb.float32[:, :], nb.float32[:, :], nb.int64),
+    nb.uint16[:, :](nb.float32[:, :], nb.float32[:, :], nb.int64),
     fastmath=True,
     parallel=True,
     cache=True,
@@ -71,10 +71,10 @@ def compute_focusmap(pyr_level1, pyr_level2, kernel_size):
     y_range = pyr_level1.shape[0]
     x_range = pyr_level1.shape[1]
 
-    # 2D focusmap (dtype=uint8); possible values:
+    # 2D focusmap (dtype=uint16); possible values:
     # 0 => pixel of pyr1
     # 1 => pixel of pyr2
-    focusmap = np.empty((y_range, x_range), dtype=np.uint8)
+    focusmap = np.empty((y_range, x_range), dtype=np.uint16)
     k = int(kernel_size / 2)
 
     # Loop through pixels of this pyramid level
@@ -102,7 +102,7 @@ def compute_focusmap(pyr_level1, pyr_level2, kernel_size):
 
 # Compute output pyramid_level from source arrays and focusmap
 @nb.njit(
-    nb.float32[:, :, :](nb.float32[:, :, :], nb.float32[:, :, :], nb.uint8[:, :]),
+    nb.float32[:, :, :](nb.float32[:, :, :], nb.float32[:, :, :], nb.uint16[:, :]),
     fastmath=True,
     parallel=True,
     cache=True,

@@ -52,7 +52,7 @@ class ImageLoadingHandler:
                     thumb = raw.extract_thumb()
                 except:
                     # If no thumb/preview, then postprocess RAW image (slower)
-                    processed = raw.postprocess(use_camera_wb=True)
+                    processed = raw.postprocess(use_camera_wb=True, output_bps=16)
                 else:
                     if thumb.format == rawpy.ThumbFormat.JPEG:
                         # Convert bytes object to ndarray

@@ -33,7 +33,7 @@ Test multiple functions of algorithm API.
 #     def finished_stack():
 #         assert type(laplacian_pyramid_algorithm.output_image) == np.ndarray
 #         assert laplacian_pyramid_algorithm.output_image.shape == (4000, 6000, 3)
-#         assert laplacian_pyramid_algorithm.output_image.dtype == np.uint8
+#         assert laplacian_pyramid_algorithm.output_image.dtype == np.uint16
 
 #     worker.signals.finished.connect(finished_stack)
 #     threadpool.start(worker)
